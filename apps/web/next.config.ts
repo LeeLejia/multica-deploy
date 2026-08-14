@@ -50,10 +50,13 @@ const nextConfig: NextConfig = {
   },
   async rewrites() {
     return {
-      // Run before file-system routes so /docs isn't shadowed by the
-      // [workspaceSlug] dynamic segment.
-      beforeFiles: docsUrl
-        ? [
+      // Run before file-system routes so /docs and the realtime endpoint are
+      // not shadowed by the [workspaceSlug] dynamic segment. `/ws` must be
+      // evaluated here: an afterFiles rule loses to that dynamic route and
+      // renders an app page instead of proxying the WebSocket handshake.
+      beforeFiles: [
+        ...(docsUrl
+          ? [
             {
               source: "/docs",
               destination: `${docsUrl}/docs`,
@@ -63,16 +66,21 @@ const nextConfig: NextConfig = {
               destination: `${docsUrl}/docs/:path*`,
             },
           ]
-        : [],
+          : []),
+        ...(remoteApiUrl
+          ? [
+              {
+                source: "/ws",
+                destination: `${remoteApiUrl}/ws`,
+              },
+            ]
+          : []),
+      ],
       afterFiles: remoteApiUrl
         ? [
             {
               source: "/api/:path*",
               destination: `${remoteApiUrl}/api/:path*`,
-            },
-            {
-              source: "/ws",
-              destination: `${remoteApiUrl}/ws`,
             },
             {
               source: "/auth/:path*",
