@@ -3,7 +3,7 @@
   "rewrites": [
     {
       "source": "/ws",
-      "destination": "https://multica.tri-bank.online/ws"
+      "destination": "https://multica-origin.tri-bank.online/ws"
     }
   ]
 }
