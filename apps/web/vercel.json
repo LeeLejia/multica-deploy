@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "source": "/ws",
+      "destination": "https://multica.tri-bank.online/ws"
+    }
+  ]
+}
